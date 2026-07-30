@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuenta Corriente NTL</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">₦</span>
+    <div>
+      <h1>Cuenta Corriente NTL</h1>
+      <p class="sub">Gestor de cuentas corrientes · reemplaza al Excel</p>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <button id="btn-export-json" class="btn ghost" title="Descargar una copia de seguridad de todos los datos">⬇ Backup JSON</button>
+    <button id="btn-import-json" class="btn ghost" title="Cargar datos desde un backup JSON">⬆ Importar</button>
+    <button id="btn-export-datajs" class="btn ghost" title="Genera el archivo data.js para subir al repositorio y compartir los datos">💾 Guardar en repo</button>
+    <input type="file" id="file-input" accept="application/json,.json" hidden>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs"></nav>
+
+<main id="main"></main>
+
+<!-- Modal edicion movimiento cuenta corriente -->
+<div class="modal-backdrop" id="modal-backdrop" hidden>
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3 id="modal-title">Nuevo movimiento</h3>
+      <button class="modal-x" id="modal-close">✕</button>
+    </div>
+    <form id="modal-form" class="modal-body"></form>
+    <div class="modal-foot">
+      <button type="button" class="btn ghost" id="modal-cancel">Cancelar</button>
+      <button type="submit" form="modal-form" class="btn primary">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
