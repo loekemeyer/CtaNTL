@@ -3,6 +3,16 @@
 Aplicación web para llevar las cuentas corrientes (antes en el Excel `Cuenta Corriente NTL.xlsx`).
 Permite **ver, agregar, modificar y eliminar** movimientos desde cualquier navegador, sin instalar nada.
 
+Los datos son **compartidos**: viven en **Supabase** (proyecto *Costos*) y se sincronizan
+**en tiempo real** entre todos los dispositivos. Ver es libre; **editar requiere una clave**.
+
+## 🔑 Clave de edición
+
+- La clave inicial es **`NTL2026`**. **Cambiala** apenas puedas: botón **🔒 Editar** → **Cambiar clave**.
+- Cualquiera con el link puede **ver** los datos; solo quien tenga la clave puede **guardar cambios**.
+- La clave se guarda encriptada (bcrypt) en Supabase y se valida en el servidor: no se puede
+  deducir desde la página.
+
 ## 🔗 Cómo verla online (GitHub Pages)
 
 1. En GitHub, entrar en **Settings → Pages**.
@@ -28,21 +38,25 @@ En cada tabla se puede:
 
 ## 💾 Dónde se guardan los datos
 
-Los cambios se guardan **automáticamente en tu navegador** (localStorage). Para no perderlos
-o compartirlos entre dispositivos, usá los botones de la barra superior:
+Todo se guarda en **Supabase** (proyecto *Costos*), en las tablas `cc_movimientos` y
+`cc_pendientes`. Cada cambio se replica en vivo a los navegadores conectados.
 
-| Botón | Para qué |
-|-------|----------|
-| **⬇ Backup JSON** | Descarga una copia de seguridad de todo. |
-| **⬆ Importar** | Restaura los datos desde un backup JSON. |
-| **💾 Guardar en repo** | Genera el archivo `data.js`. Si lo subís al repositorio, la versión online queda actualizada para todos. |
+- El indicador de arriba muestra **Conectado** / **Sin conexión**.
+- Si te quedás sin internet, la app muestra la **última copia** guardada localmente y avisa
+  que no se guardará hasta reconectar.
+- **⬇ Backup** descarga una copia completa en JSON por las dudas.
 
-> Para que la versión publicada muestre datos nuevos para cualquiera que la abra por primera vez,
-> reemplazá el `data.js` del repositorio por el que descargaste con **Guardar en repo**.
+### Seguridad (cómo funciona)
+
+- Las tablas tienen **RLS**: lectura pública, sin escritura directa.
+- Agregar/editar/borrar pasa por **funciones en el servidor** (`cc_upsert_movimiento`,
+  `cc_delete_movimiento`, `cc_upsert_pendiente`, etc.) que **exigen la clave** antes de tocar
+  la base. La clave pública (`sb_publishable_...`) del `supabase-config.js` solo sirve para leer.
 
 ## 🗂️ Archivos
 
 - `index.html` — estructura de la página.
 - `styles.css` — estilos.
-- `app.js` — lógica (CRUD, filtros, saldos, exportar/importar).
-- `data.js` — datos iniciales extraídos del Excel.
+- `app.js` — lógica (carga desde Supabase, CRUD con clave, filtros, saldos, tiempo real).
+- `supabase-config.js` — URL y clave pública del proyecto (seguro exponerlas).
+- `data.js` — copia del Excel usada solo como respaldo offline inicial.

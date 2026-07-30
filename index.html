@@ -12,14 +12,13 @@
     <span class="logo">₦</span>
     <div>
       <h1>Cuenta Corriente NTL</h1>
-      <p class="sub">Gestor de cuentas corrientes · reemplaza al Excel</p>
+      <p class="sub">Gestor de cuentas corrientes · datos compartidos en Supabase</p>
     </div>
   </div>
   <div class="topbar-actions">
-    <button id="btn-export-json" class="btn ghost" title="Descargar una copia de seguridad de todos los datos">⬇ Backup JSON</button>
-    <button id="btn-import-json" class="btn ghost" title="Cargar datos desde un backup JSON">⬆ Importar</button>
-    <button id="btn-export-datajs" class="btn ghost" title="Genera el archivo data.js para subir al repositorio y compartir los datos">💾 Guardar en repo</button>
-    <input type="file" id="file-input" accept="application/json,.json" hidden>
+    <span id="conn-status" class="pill pill-wait" title="Estado de conexión">Conectando…</span>
+    <button id="btn-clave" class="btn ghost" title="Habilitar edición con la clave">🔒 Editar</button>
+    <button id="btn-export-json" class="btn ghost" title="Descargar una copia de seguridad de todos los datos">⬇ Backup</button>
   </div>
 </header>
 
@@ -27,7 +26,7 @@
 
 <main id="main"></main>
 
-<!-- Modal edicion movimiento cuenta corriente -->
+<!-- Modal edicion movimiento / pendiente -->
 <div class="modal-backdrop" id="modal-backdrop" hidden>
   <div class="modal" role="dialog" aria-modal="true">
     <div class="modal-head">
@@ -42,8 +41,37 @@
   </div>
 </div>
 
+<!-- Modal clave -->
+<div class="modal-backdrop" id="clave-backdrop" hidden>
+  <div class="modal" style="max-width:400px" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3 id="clave-title">Ingresá la clave para editar</h3>
+      <button class="modal-x" id="clave-close">✕</button>
+    </div>
+    <form id="clave-form" class="modal-body" style="grid-template-columns:1fr">
+      <div class="field full">
+        <label id="clave-label">Clave</label>
+        <input type="password" id="clave-input" autocomplete="off" placeholder="••••••">
+      </div>
+      <div class="field full" id="clave-nueva-wrap" hidden>
+        <label>Nueva clave (mín. 4)</label>
+        <input type="password" id="clave-nueva" autocomplete="off" placeholder="Nueva clave">
+      </div>
+      <p id="clave-error" class="clave-error" hidden></p>
+    </form>
+    <div class="modal-foot">
+      <button type="button" class="btn ghost" id="clave-change-toggle" title="Cambiar la clave">Cambiar clave</button>
+      <div style="flex:1"></div>
+      <button type="button" class="btn ghost" id="clave-cancel">Cancelar</button>
+      <button type="submit" form="clave-form" class="btn primary" id="clave-submit">Desbloquear</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast" class="toast" hidden></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 <script src="data.js"></script>
 <script src="app.js"></script>
 </body>
