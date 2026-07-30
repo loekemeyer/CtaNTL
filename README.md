@@ -6,6 +6,13 @@ Permite **ver, agregar, modificar y eliminar** movimientos desde cualquier naveg
 Los datos son **compartidos**: viven en **Supabase** (proyecto *Costos*) y se sincronizan
 **en tiempo real** entre todos los dispositivos. Ver es libre; **editar requiere una clave**.
 
+## 🌐 La página online
+
+👉 **https://fxyhvacysnqzzsdvmplx.supabase.co/functions/v1/cuenta**
+
+Está publicada como una **Supabase Edge Function** (misma cuenta *Costos*), así que ya funciona
+sin depender de GitHub Pages. Guardala en favoritos / pantalla de inicio del teléfono.
+
 ## 🔑 Clave de edición
 
 - La clave inicial es **`NTL2026`**. **Cambiala** apenas puedas: botón **🔒 Editar** → **Cambiar clave**.
@@ -60,3 +67,16 @@ Todo se guarda en **Supabase** (proyecto *Costos*), en las tablas `cc_movimiento
 - `app.js` — lógica (carga desde Supabase, CRUD con clave, filtros, saldos, tiempo real).
 - `supabase-config.js` — URL y clave pública del proyecto (seguro exponerlas).
 - `data.js` — copia del Excel usada solo como respaldo offline inicial.
+- `deploy/` — cómo se publica online:
+  - `build_standalone.py` — junta todo en un solo HTML y genera `functions/cuenta/page.ts`.
+  - `functions/cuenta/index.ts` — la Edge Function que sirve la página.
+
+### Publicar cambios online
+
+Cuando edites `index.html`, `styles.css` o `app.js`, para actualizar la versión online:
+
+1. `python3 deploy/build_standalone.py`
+2. Redeployar la función `cuenta` en Supabase con `deploy/functions/cuenta/index.ts` y `page.ts`.
+
+> El otro camino (opcional) es **GitHub Pages**: Settings → Pages → esta rama → carpeta `/ (root)`.
+> Sirve los mismos archivos sueltos en `https://<usuario>.github.io/<repo>/`.
